@@ -3,7 +3,6 @@ import unittest
 from laskin import Laskin
 
 
-# test
 class StubIO:
     def __init__(self, inputs):
         self.inputs = inputs
