@@ -2,7 +2,7 @@ import unittest
 
 from player import Player
 from player_reader import PlayerReader
-from statistics_service import StatisticsService
+from statistics_service import SortBy, StatisticsService
 
 
 class StubIO:
@@ -94,3 +94,75 @@ class TestLaskin(unittest.TestCase):
         joukkue = stats.team("EDM")
         self.assertEqual(joukkue[0].name, "Leon Draisaitl")
         self.assertEqual(joukkue[1].name, "Connor McDavid")
+
+    def test_hae_pisteiden_mukaan(self):
+        players = StubIO(
+            [
+                Player("Nikita Kucherov", "TBL", 37, 84),
+                Player("Nathan MacKinnon", "COL", 32, 84),
+                Player("David Pastrnak", "BOS", 43, 63),
+                Player("Leon Draisaitl", "EDM", 52, 54),
+                Player("Mitch Marner", "TOR", 27, 75),
+                Player("Connor McDavid", "EDM", 26, 74),
+                Player("Kyle Connor", "WPG", 41, 56),
+                Player("Jack Eichel", "VGK", 28, 66),
+                Player("Cale Makar", "COL", 30, 62),
+                Player("Sidney Crosby", "PIT", 33, 58),
+                Player("Clayton Keller", "UTA", 30, 60),
+            ]
+        )
+        stats = StatisticsService(players)
+        pelaaja = stats.top(5, SortBy.POINTS)
+        self.assertEqual(pelaaja[0].name, "Nikita Kucherov")
+        self.assertEqual(pelaaja[1].name, "Nathan MacKinnon")
+        self.assertEqual(pelaaja[2].name, "David Pastrnak")
+        self.assertEqual(pelaaja[3].name, "Leon Draisaitl")
+        self.assertEqual(pelaaja[4].name, "Mitch Marner")
+
+    def test_hae_maalien_mukaan(self):
+        players = StubIO(
+            [
+                Player("Nikita Kucherov", "TBL", 37, 84),
+                Player("Nathan MacKinnon", "COL", 32, 84),
+                Player("David Pastrnak", "BOS", 43, 63),
+                Player("Leon Draisaitl", "EDM", 52, 54),
+                Player("Mitch Marner", "TOR", 27, 75),
+                Player("Connor McDavid", "EDM", 26, 74),
+                Player("Kyle Connor", "WPG", 41, 56),
+                Player("Jack Eichel", "VGK", 28, 66),
+                Player("Cale Makar", "COL", 30, 62),
+                Player("Sidney Crosby", "PIT", 33, 58),
+                Player("Clayton Keller", "UTA", 30, 60),
+            ]
+        )
+        stats = StatisticsService(players)
+        pelaaja = stats.top(5, SortBy.GOALS)
+        self.assertEqual(pelaaja[0].name, "Leon Draisaitl")
+        self.assertEqual(pelaaja[1].name, "David Pastrnak")
+        self.assertEqual(pelaaja[2].name, "Kyle Connor")
+        self.assertEqual(pelaaja[3].name, "Nikita Kucherov")
+        self.assertEqual(pelaaja[4].name, "Sidney Crosby")
+
+    def test_hae_syöttöjen_mukaan(self):
+        players = StubIO(
+            [
+                Player("Nikita Kucherov", "TBL", 37, 84),
+                Player("Nathan MacKinnon", "COL", 32, 84),
+                Player("David Pastrnak", "BOS", 43, 63),
+                Player("Leon Draisaitl", "EDM", 52, 54),
+                Player("Mitch Marner", "TOR", 27, 75),
+                Player("Connor McDavid", "EDM", 26, 74),
+                Player("Kyle Connor", "WPG", 41, 56),
+                Player("Jack Eichel", "VGK", 28, 66),
+                Player("Cale Makar", "COL", 30, 62),
+                Player("Sidney Crosby", "PIT", 33, 58),
+                Player("Clayton Keller", "UTA", 30, 60),
+            ]
+        )
+        stats = StatisticsService(players)
+        pelaaja = stats.top(5, SortBy.ASSISTS)
+        self.assertEqual(pelaaja[0].name, "Nikita Kucherov")
+        self.assertEqual(pelaaja[1].name, "Nathan MacKinnon")
+        self.assertEqual(pelaaja[2].name, "Mitch Marner")
+        self.assertEqual(pelaaja[3].name, "Connor McDavid")
+        self.assertEqual(pelaaja[4].name, "Jack Eichel")
