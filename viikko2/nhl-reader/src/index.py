@@ -19,7 +19,8 @@ def graphic_nat(nat):
 def main():
     console = Console()
     season = console.input(
-        "Season [[magenta]2018-19/2019-20/2020-21/2021-22/2022-23/2023-24/2024-25/2025-26][/magenta] (2024-25): "
+        """Season [[magenta]2018-19/2019-20/2020-21/
+        2021-22/2022-23/2023-24/2024-25/2025-26][/magenta] (2024-25): """
     )
     url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
     reader = PlayerReader(url)
@@ -32,18 +33,19 @@ def main():
         if not user_input:
             break
         players = stats.find_players_by_nationality(user_input)
-        if players:
-            table = graphic_nat(user_input)
-            for player in players:
-                table.add_row(
-                    player.name,
-                    player.team,
-                    str(player.goals),
-                    str(player.assists),
-                    str(player.goals + player.assists),
-                )
-            console.print(table)
-            print("\n")
+        if not players:
+            continue
+        table = graphic_nat(user_input)
+        for player in players:
+            table.add_row(
+                player.name,
+                player.team,
+                str(player.goals),
+                str(player.assists),
+                str(player.goals + player.assists),
+            )
+        console.print(table)
+        print("\n")
 
 
 if __name__ == "__main__":

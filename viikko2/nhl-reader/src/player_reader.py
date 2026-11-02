@@ -8,7 +8,7 @@ class PlayerReader:
         self._url = url
 
     def get_players(self):
-        response = requests.get(self._url).json()
+        response = requests.get(self._url, timeout=5).json()
 
         players = []
         for player_dict in response:

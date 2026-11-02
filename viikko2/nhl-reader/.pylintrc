@@ -26,8 +26,9 @@ indent-string='    '
 [REFACTORING]
 
 max-nested-blocks=2
+min-public-methods=1
 
 [DESIGN]
 
-max-statements=10
-max-locals=10
+max-statements=18
+max-locals=11

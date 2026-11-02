@@ -3,7 +3,8 @@ class PlayerStats:
         self._players = reader.get_players()
 
     def team(self, team_name):
-        players_of_team = filter(lambda player: player.team == team_name, self._players)
+        players_of_team = filter(
+            lambda player: player.team == team_name, self._players)
 
         return list(players_of_team)
 
