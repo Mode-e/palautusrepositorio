@@ -3,7 +3,7 @@
 ignore-paths=src/tests
 ignore=single_file_to_ignore.py
 
-[MESSAGE CONTROL]
+[MESSAGES CONTROL]
 
 disable=raw-checker-failed,
         bad-inline-option,
