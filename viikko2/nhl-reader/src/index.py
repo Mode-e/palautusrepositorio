@@ -1,9 +1,8 @@
 from statistics import PlayerStats
 
+from player_reader import PlayerReader
 from rich.console import Console
 from rich.table import Table
-
-from player_reader import PlayerReader
 
 
 def graphic_nat(nat):
