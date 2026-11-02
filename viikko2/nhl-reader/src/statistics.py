@@ -15,10 +15,10 @@ class PlayerStats:
     def nation(self, nat):
         return list(filter(lambda p: p.nationality == nat, self._players))
 
-    def top_scorers_by_nationality(self, nat):
+    def top_scorer_by_nationality(self, nat):
         players = PlayerStats.nation(self, nat)
         players.sort(reverse=True, key=lambda p: p.goals + p.assists)
-        return players
+        return players[0] if players else None
 
     def find_players_by_nationality(self, nat):
         players = PlayerStats.nation(self, nat)

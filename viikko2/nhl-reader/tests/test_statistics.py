@@ -4,85 +4,107 @@ from src.player import Player
 from src.statistics import PlayerStats
 
 
-class StubReader:
+class StubIO:
     def __init__(self, players):
-        self._players = players
+        self.players = players
 
     def get_players(self):
-        return self._players
+        return self.players
 
 
-def create_player(name, nationality, team, goals, assists):
-    return Player(
-        {
-            "name": name,
-            "nationality": nationality,
-            "team": team,
-            "goals": goals,
-            "assists": assists,
-            "games": 10,
-            "id": name,
-        }
-    )
-
-
-class TestPlayerStats(unittest.TestCase):
+class TestStatistics(unittest.TestCase):
     def setUp(self):
-        self.players = [
-            create_player("Player C", "CAN", "AAA", 5, 10),
-            create_player("Player A", "FIN", "AAA", 20, 3),
-            create_player("Player B", "CAN", "BBB", 10, 10),
-            create_player("Player D", "CAN", "AAA", 10, 12),
-        ]
-        self.stats = PlayerStats(StubReader(self.players))
+        self.players = StubIO(
+            [
+                Player(
+                    {
+                        "name": "Nikita Kucherov",
+                        "nationality": "RUS",
+                        "assists": 84,
+                        "goals": 37,
+                        "team": "TBL",
+                        "games": 81,
+                        "id": 1,
+                    }
+                ),
+                Player(
+                    {
+                        "name": "Nathan MacKinnon",
+                        "nationality": "CAN",
+                        "assists": 84,
+                        "goals": 32,
+                        "team": "COL",
+                        "games": 82,
+                        "id": 2,
+                    }
+                ),
+                Player(
+                    {
+                        "name": "Leon Draisaitl",
+                        "nationality": "GER",
+                        "assists": 54,
+                        "goals": 52,
+                        "team": "EDM",
+                        "games": 81,
+                        "id": 3,
+                    }
+                ),
+                Player(
+                    {
+                        "name": "Connor McDavid",
+                        "nationality": "CAN",
+                        "assists": 74,
+                        "goals": 26,
+                        "team": "EDM",
+                        "games": 76,
+                        "id": 4,
+                    }
+                ),
+            ]
+        )
+        self.stats = PlayerStats(self.players)
 
-    def test_team_returns_players_from_requested_team(self):
-        players = self.stats.team("AAA")
+    def test_joukkueen_pelaajat(self):
+        joukkue = self.stats.team("EDM")
+
+        self.assertEqual(joukkue[0].name, "Leon Draisaitl")
+        self.assertEqual(joukkue[1].name, "Connor McDavid")
+        self.assertEqual(self.stats.team("XXX"), [])
+
+    def test_kansallisuudet(self):
+        self.assertEqual(self.stats.get_nationalities(), ["RUS", "CAN", "GER"])
+
+    def test_hae_kansallisuuden_pelaajat(self):
+        pelaajat = self.stats.nation("CAN")
 
         self.assertEqual(
-            [player.name for player in players],
-            ["Player C", "Player A", "Player D"],
+            [pelaaja.name for pelaaja in pelaajat],
+            ["Nathan MacKinnon", "Connor McDavid"],
         )
 
-    def test_team_returns_empty_list_for_unknown_team(self):
-        self.assertEqual(self.stats.team("ZZZ"), [])
+    def test_hae_kansallisuuden_paras_pelaaja(self):
+        pelaaja = self.stats.top_scorer_by_nationality("CAN")
 
-    def test_get_nationalities_returns_unique_values_in_first_seen_order(self):
-        self.assertEqual(self.stats.get_nationalities(), ["CAN", "FIN"])
+        self.assertEqual(pelaaja.name, "Nathan MacKinnon")
+        self.assertIsNone(self.stats.top_scorer_by_nationality("XXX"))
 
-    def test_nation_returns_players_with_matching_nationality(self):
-        players = self.stats.nation("CAN")
+    def test_hae_kansallisuuden_pelaajat_pistejarjestyksessa(self):
+        pelaajat = self.stats.find_players_by_nationality("CAN")
 
         self.assertEqual(
-            [player.name for player in players],
-            ["Player C", "Player B", "Player D"],
+            [pelaaja.name for pelaaja in pelaajat],
+            ["Nathan MacKinnon", "Connor McDavid"],
         )
 
-    def test_top_scorers_by_nationality_orders_by_total_points(self):
-        players = self.stats.top_scorers_by_nationality("CAN")
+    def test_eniten_maaleja_tehneet(self):
+        pelaajat = self.stats.top_goal_scorers(2)
 
         self.assertEqual(
-            [player.name for player in players],
-            ["Player D", "Player B", "Player C"],
+            [pelaaja.name for pelaaja in pelaajat],
+            ["Leon Draisaitl", "Nikita Kucherov"],
         )
 
-    def test_find_players_by_nationality_orders_by_total_points(self):
-        players = self.stats.find_players_by_nationality("CAN")
-
-        self.assertEqual(
-            [player.name for player in players],
-            ["Player D", "Player B", "Player C"],
-        )
-
-    def test_top_goal_scorers_returns_requested_number_in_order(self):
-        players = self.stats.top_goal_scorers(2)
-
-        self.assertEqual(
-            [player.name for player in players],
-            ["Player A", "Player B"],
-        )
-
-    def test_top_goal_scorers_returns_empty_list_for_zero(self):
+    def test_maaleja_tehneiden_maara_nolla(self):
         self.assertEqual(self.stats.top_goal_scorers(0), [])
 
 
