@@ -47,4 +47,4 @@ jobs:
         with:
           files: ${{ matrix.project-directory }}/coverage.xml
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.PALAUTUSREPOSITORIO }}
