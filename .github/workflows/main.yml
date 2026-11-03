@@ -3,27 +3,48 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - "viikko1/riippuvuuksien-injektointi/**"
+      - "viikko2/nhl-reader/**"
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project-directory:
+          - viikko1/riippuvuuksien-injektointi
+          - viikko2/nhl-reader
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.project-directory }}
 
     steps:
       - uses: actions/checkout@v5
+
       - name: Install uv
         uses: astral-sh/setup-uv@v10.1.0
         with:
           python-version: "3.14"
+
       - name: Install dependencies
-        run: cd viikko2/nhl-reader && uv sync
+        run: uv sync
+
       - name: Run tests
-        run: cd viikko2/nhl-reader && uv run coverage run --branch -m pytest
+        run: uv run --with coverage coverage run --branch -m pytest
+
       - name: Coverage report
-        run: cd viikko2/nhl-reader && uv run coverage xml
-      - name: Coverage report to Codecov
-        uses: codecov/codecov-action@v5
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: uv run --with coverage coverage xml
 
       - name: Run Pylint
-        run: cd viikko2/nhl-reader && uv run pylint src
+        if: matrix.project-directory == 'viikko2/nhl-reader'
+        run: uv run pylint src
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ${{ matrix.project-directory }}/coverage.xml
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
