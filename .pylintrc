@@ -1,0 +1,2 @@
+[MAIN]
+init-hook='import sys; sys.path.extend(["src", "viikko3/login/src"])'
