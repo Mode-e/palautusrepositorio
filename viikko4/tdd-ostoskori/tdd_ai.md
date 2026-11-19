@@ -2,4 +2,4 @@ Aluksi agentti ei noudattanut minimaalisia muutoksia. Mutta toteutusten puolesta
 
 Ei kovakoodattuja arvoja.  
 
-Testien tekeminen agentilta luonnistui huomattavasti paremmin eikä tarvinnut pyyttää poistamaan joitain muutoksia, joten B tuntui paremmalta. 
+Testien tekeminen agentilta luonnistui huomattavasti paremmin eikä tarvinnut pyyttää poistamaan joitain muutoksia, joten B tuntui paremmalta.
