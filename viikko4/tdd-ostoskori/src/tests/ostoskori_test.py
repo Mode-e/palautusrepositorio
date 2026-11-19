@@ -8,6 +8,15 @@ class TestOstoskori(unittest.TestCase):
     def setUp(self):
         self.kori = Ostoskori()
 
+    def lisaa_tuotteet(self, *tuotteet):
+        for tuote in tuotteet:
+            self.kori.lisaa_tuote(tuote)
+
+    def assert_kori_on_tyhja(self):
+        self.assertEqual(self.kori.tavaroita_korissa(), 0)
+        self.assertEqual(self.kori.hinta(), 0)
+        self.assertEqual(len(self.kori.ostokset()), 0)
+
     def test_ostoskorin_hinta_ja_tavaroiden_maara_alussa(self):
         self.assertEqual(self.kori.hinta(), 0)
         self.assertEqual(self.kori.tavaroita_korissa(), 0)
@@ -29,8 +38,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("juusto", 5)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(self.kori.tavaroita_korissa(), 2)
 
     def test_kahden_eri_tuotteen_lisaamisen_jalkeen_ostoskorin_hinta_on_sama_kuin_tuotteiden_hintojen_summa(
@@ -38,8 +46,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("juusto", 5)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(self.kori.hinta(), 8)
 
     def test_kahden_saman_tuotteen_lisaamisen_jalkeen_ostoskorissa_on_kaksi_tavaraa(
@@ -47,8 +54,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("maito", 3)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(self.kori.tavaroita_korissa(), 2)
 
     def test_kahden_saman_tuotteen_lisaamisen_jalkeen_ostoskorin_hinta_on_sama_kuin_tuotteiden_hintojen_summa(
@@ -56,8 +62,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("maito", 3)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(self.kori.hinta(), 6)
 
     def test_yhden_tuotteen_lisaamisen_jalkeen_ostoskorissa_on_yksi_ostos(self):
@@ -77,15 +82,13 @@ class TestOstoskori(unittest.TestCase):
     def test_kahden_eri_tuotteen_lisaamisen_jalkeen_ostoskorissa_on_kaksi_ostosta(self):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("juusto", 5)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(len(self.kori.ostokset()), 2)
 
     def test_kahden_saman_tuotteen_lisaamisen_jalkeen_ostoskorissa_on_yksi_ostos(self):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("maito", 3)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.assertEqual(len(self.kori.ostokset()), 1)
 
     def test_kahden_saman_tuotteen_lisaamisen_jalkeen_ostoksen_nimi_on_tuotteen_nimi_ja_lukumaara_on_kaksi(
@@ -93,8 +96,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("maito", 3)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         ostos = self.kori.ostokset()[0]
         self.assertEqual(ostos.tuotteen_nimi(), "maito")
         self.assertEqual(ostos.lukumaara(), 2)
@@ -104,8 +106,7 @@ class TestOstoskori(unittest.TestCase):
     ):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("maito", 3)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.kori.poista_tuote(tuote1)
         self.assertEqual(len(self.kori.ostokset()), 1)
         ostos = self.kori.ostokset()[0]
@@ -115,16 +116,11 @@ class TestOstoskori(unittest.TestCase):
         tuote = Tuote("maito", 3)
         self.kori.lisaa_tuote(tuote)
         self.kori.poista_tuote(tuote)
-        self.assertEqual(self.kori.tavaroita_korissa(), 0)
-        self.assertEqual(self.kori.hinta(), 0)
-        self.assertEqual(len(self.kori.ostokset()), 0)
+        self.assert_kori_on_tyhja()
 
     def test_tyhjenna_metodi_tyhjentaa_korin(self):
         tuote1 = Tuote("maito", 3)
         tuote2 = Tuote("juusto", 5)
-        self.kori.lisaa_tuote(tuote1)
-        self.kori.lisaa_tuote(tuote2)
+        self.lisaa_tuotteet(tuote1, tuote2)
         self.kori.tyhjenna()
-        self.assertEqual(self.kori.tavaroita_korissa(), 0)
-        self.assertEqual(self.kori.hinta(), 0)
-        self.assertEqual(len(self.kori.ostokset()), 0)
+        self.assert_kori_on_tyhja()
