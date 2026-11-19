@@ -6,7 +6,7 @@ class Ostoskori:
         pass
 
     def tavaroita_korissa(self):
-        pass
+        return 0
 
     def hinta(self):
         return 0
