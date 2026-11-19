@@ -1,2 +1,5 @@
 [MAIN]
-init-hook='import sys; sys.path.extend(["src", "viikko3/login/src"])'
+init-hook='import sys; sys.path.extend(["src", "viikko3/login/src", "viikko4/verkkokauppa/src", "viikko4/maksukortti-mock/src"])'
+
+[MESSAGES CONTROL]
+disable=too-many-function-args,W0611,W0622,C0114,C0116,C0301
