@@ -26,4 +26,4 @@
 - Execute tests only with `uv run pytest`.
 - Do not change `src/ostos.py` or `src/tuote.py`.
 - Do not edit tests unless the user explicitly asks.
-- Implement only the minimal code needed to make the tests pass.
+- Always implement absolutely minimal code that makes the tests pass.
