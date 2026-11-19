@@ -9,3 +9,11 @@ dependencies = []
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.pylint."messages control"]
+disable = [
+    "too-many-function-args",
+    "W0611",
+    "C0114",
+    "C0116",
+]
